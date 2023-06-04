@@ -15,7 +15,7 @@
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
-    <XCODE_MAC targetFolder="Builds/MacOSX">
+    <XCODE_MAC targetFolder="Builds/MacOSX" customXcodeResourceFolders="./Songs">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug" targetName="ColorMixer"/>
         <CONFIGURATION isDebug="0" name="Release" targetName="ColorMixer"/>
@@ -33,6 +33,7 @@
         <MODULEPATH id="juce_graphics" path="../../../dev/repos/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="../../../dev/repos/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../../dev/repos/JUCE/modules"/>
+        <MODULEPATH id="juce_osc" path="../../../dev/repos/JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
   </EXPORTFORMATS>
@@ -50,5 +51,6 @@
     <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_osc" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
   </MODULES>
 </JUCERPROJECT>

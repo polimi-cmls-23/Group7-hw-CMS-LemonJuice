@@ -13,6 +13,7 @@
 #include <juce_core/juce_core.h>
 
 
+
 //==============================================================================
 /**
 */
@@ -23,6 +24,9 @@ class ColorMixerAudioProcessor  : public juce::AudioProcessor
                             #if JucePlugin_Enable_ARA
                              , public juce::AudioProcessorARAExtension
                             #endif
+,
+private juce::OSCReceiver,
+private juce::OSCReceiver::ListenerWithOSCAddress<juce::OSCReceiver::MessageLoopCallback>
 {
 public:
     //==============================================================================
@@ -32,7 +36,12 @@ public:
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
-
+    //==============================================================================
+        
+    //overriding oscMessageReceived to define behavior when receiving OSC messages
+    void oscMessageReceived(const juce::OSCMessage& message) override;
+    
+    //==============================================================================
    #ifndef JucePlugin_PreferredChannelConfigurations
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
    #endif
@@ -61,6 +70,23 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    //==============================================================================
+    // Interface
+    void loadSong(juce::String& song);
+    void setTrackVolume(int n_track , float volume);
+    void setPlayHeadStart(float position);
+    void setLoopEnd(float position);
+    void setLoopStart(float position);
+    void setIsPlaying(bool playing);
+    void setIsLooping(bool looping);
+    void setIsStopped(bool stopping);
+    void setSongArray(juce::String selectedSong);
+    void sendSeconds();
+
+    
+    
+    
+
 
 private:
     //==============================================================================
@@ -68,22 +94,29 @@ private:
 
     
     void loadFileIntoBuffer(juce::File& file, juce::AudioSampleBuffer& buffer);
-    void loadSong(const juce::String& song);
-    void setTrackVolume(int n_track , float volume);
-    void setPlayHeadStart(float position);
-    void setLoopEnd(float position);
-    void setLoopStart(float position);
+
     
     int trackLength; 
     int playHead;
     int loopEnd;
     int loopStart;
     int numTracks;
+    int numSamples;
     
-    bool isPlaying = true;
-    bool isLooping = false;
+    int nrTracks = 5;
     
-    juce::OwnedArray<juce::AudioSampleBuffer> trackBuffers; // Audio buffers for each track
+    bool isLooping;
+    bool isPlaying;
+    bool isStopped;
+    bool namesSent = false;
+    
+    float durationInSeconds = 0;
+
+    
+    juce::StringPairArray folderNamesDictionary;
+    juce::String songName;
+
+    std::map<int, juce::AudioSampleBuffer*> trackBuffers;
     std::vector<float> trackVolumes;
     
 };
